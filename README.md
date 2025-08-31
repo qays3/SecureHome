@@ -1,1 +1,1 @@
-# HomeSoc-Wazuh
+# HomeSOC-Wazuh
