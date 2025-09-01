@@ -40,11 +40,22 @@
 ### Resource Allocation
 Configure your VM with adequate resources:
 
+* VM Resources
 ![VM Resources](imgs/1.png)
+
+* RAM Configuration
 ![RAM Configuration](imgs/2.png)
+
+* CPU
 ![CPU](imgs/3.png)
+
+* Display settings
 ![Display settings](imgs/4.png)
+
+* Sorage
 ![Sorage](imgs/5.png)
+
+* Network Configuration
 ![Network Configuration](imgs/6.png)
 
 ### Initial Server Setup
