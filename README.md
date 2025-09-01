@@ -342,15 +342,64 @@ Add monitoring configuration:
 </agent_config>
 ```
 
-#### Step 3: Apply Configuration
+#### Step 3: Install Network Monitoring (Suricata)
+Install Suricata for comprehensive network monitoring:
 ```bash
-sudo systemctl restart wazuh-manager
+sudo apt update
+sudo apt install suricata
+sudo systemctl enable suricata
+sudo systemctl start suricata
 ```
 
-#### Step 4: Update Agent
+#### Step 4: Configure Network Log Collection
+Add network monitoring to Wazuh configuration:
+```bash
+sudo nano /var/ossec/etc/ossec.conf
+```
+
+Add network monitoring configurations before `</ossec_config>`:
+```xml
+<!-- Network traffic monitoring -->
+<localfile>
+  <location>/var/log/suricata/eve.json</location>
+  <log_format>json</log_format>
+</localfile>
+
+<!-- Syslog receiver for router logs -->
+<remote>
+  <connection>syslog</connection>
+  <port>514</port>
+  <protocol>udp</protocol>
+  <allowed-ips>192.168.1.0/24</allowed-ips>
+</remote>
+```
+
+#### Step 5: Configure Router Logging (Optional)
+If your router supports syslog:
+1. Access router admin panel
+2. Enable syslog/logging features  
+3. Set syslog server to: `192.168.1.44:514`
+4. Configure desired log types (connections, blocks, DHCP, etc.)
+
+#### Step 6: Apply All Configurations
+Restart services to apply changes:
+```bash
+sudo systemctl restart wazuh-manager
+sudo systemctl restart suricata
+```
+
+#### Step 7: Update Agent Configuration
+Restart Windows agent to pull new monitoring settings:
 ```cmd
 NET STOP WazuhSvc
 NET START WazuhSvc
+```
+
+#### Step 8: Verify Network Monitoring
+Check if Suricata is generating logs:
+```bash
+ls -la /var/log/suricata/
+tail -f /var/log/suricata/eve.json
 ```
 
 ---
