@@ -6,6 +6,102 @@
 
 **Note**: Replace `192.168.1.44` with your actual server IP address throughout this guide.
 
+<details>
+<summary><strong>📊 Click here to see detailed data collection from Windows Agent</strong></summary>
+
+## Data Collection Overview
+
+### Standard Agent Data
+
+**System Information:**
+- Hardware inventory (CPU, RAM, storage, network adapters)
+- Operating system details and patch levels
+- Installed software and packages
+- Network configuration and active connections
+- Running processes and services
+
+**File Integrity Monitoring:**
+- Changes to critical system directories (`C:\Windows`, `C:\Windows\System32`)
+- Modifications to executable files (`.exe`, `.dll`, `.bat`, `.cmd`)
+- Registry key modifications (startup entries, security policies, services)
+- File creation/deletion/modification in monitored paths
+- Hash calculations (MD5, SHA1, SHA256) for changed files
+
+**Windows Event Logs:**
+- **Security Events**: Logons, logoffs, privilege usage, account management
+- **System Events**: Service starts/stops, system crashes, hardware changes
+- **Application Events**: Software installations, crashes, errors
+
+### EDR-Enhanced Data (via Sysmon)
+
+**Process Monitoring:**
+- Process creation and termination (Event ID 1)
+- Command line arguments and parent processes
+- Process image loads and DLL injections (Event ID 7)
+- Process and thread access attempts (Event ID 8, 10)
+
+**Network Activity:**
+- Network connections and communications (Event ID 3)
+- Source/destination IPs, ports, and protocols
+- DNS queries and responses (Event ID 22)
+
+**File System Activity:**
+- File creation, modification, and deletion timestamps
+- File stream creations (Event ID 15)
+- Registry modifications with specific keys and values (Event ID 12, 13, 14)
+
+**PowerShell Monitoring:**
+- PowerShell script executions and commands
+- PowerShell module loads and function calls
+- Encoded/obfuscated command detection
+
+### Specific Event IDs Being Monitored
+
+**Security Log Events:**
+- **4624**: Successful account logon
+- **4625**: Failed account logon
+- **4648**: Logon using explicit credentials
+- **4688**: New process creation
+- **4689**: Process termination
+- **4768**: Kerberos authentication ticket requested
+
+**Sysmon Events:**
+- **Event ID 1**: Process creation
+- **Event ID 3**: Network connection
+- **Event ID 7**: Image loaded (DLLs)
+- **Event ID 8**: CreateRemoteThread
+- **Event ID 10**: ProcessAccess
+- **Event ID 12-14**: Registry events
+- **Event ID 15**: FileCreateStreamHash
+- **Event ID 22**: DNS query
+
+### Data Enrichment
+
+**Contextual Information:**
+- User account details and group memberships
+- Geographic IP location data
+- Process reputation and digital signatures
+- File hash reputation checking
+- Vulnerability assessments
+
+**Behavioral Analysis:**
+- Logon patterns and anomalies
+- Process execution chains
+- Network communication patterns
+- File access patterns
+
+### Data Storage and Retention
+
+The collected data is:
+- Indexed in Wazuh's Elasticsearch-based indexer
+- Stored with timestamps and correlation IDs
+- Available for real-time analysis and historical queries
+- Compressed and managed according to retention policies
+
+This comprehensive monitoring provides visibility into system activities, potential threats, and security incidents across your Windows environment while maintaining detailed audit trails for compliance and forensic analysis.
+
+</details>
+
 ## Lab Environment
 
 - **Host Platform**: VirtualBox
